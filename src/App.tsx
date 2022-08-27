@@ -1,25 +1,13 @@
+import type { Vote } from "./types";
 import { useState } from "react";
+import { getResults, image } from "./api";
 import Card from "./Card";
 
 function App() {
   const [showResults, setShowResults] = useState(false);
-  const [play, setPlay] = useState(true);
-  const [results, setResults] = useState<
-    {
-      name: string;
-      votes: {
-        wins: number;
-        losses: number;
-      };
-    }[]
-  >([]);
+  const [results, setResults] = useState<Vote[]>([]);
 
-  const fetchResults = () => {
-    setShowResults(true);
-    fetch("https://cats-api.sunney.dev/results")
-      .then((res) => res.json())
-      .then(setResults);
-  };
+  const fetchResults = () => getResults().then(setResults);
 
   return (
     <div
@@ -35,7 +23,7 @@ function App() {
             {results.map((result) => (
               <div className="flex flex-col gap-2 mb-5">
                 <img
-                  src={`https://files.sunney.dev/cats/${result.name}`}
+                  src={image(result.name)}
                   alt="cat"
                   width={200}
                   height={300}
@@ -59,14 +47,11 @@ function App() {
       )}
       <button
         onClick={() => {
-          if (!showResults) {
-            setPlay(false);
-            setShowResults(true);
-            fetchResults();
-          } else {
-            setPlay(true);
-            setShowResults(false);
-          }
+          setShowResults((prev) => {
+            if (!prev) fetchResults();
+
+            return !prev;
+          });
         }}
         className="absolute right-0 top-0 m-4 text-black py-2 px-4 font-semibold bg-white rounded-xl hover:bg-zinc-800 hover:text-white transition-colors duration-200"
       >
