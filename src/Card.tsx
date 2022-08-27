@@ -4,7 +4,7 @@ import Button from "./Button";
 import CatSkeleton from "./CatSkeleton";
 
 export default function Card() {
-  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState(window.innerHeight > 640 ? 532 : 300);
   const [images, setImages] = useState<[string, string]>();
   const [imagesLoading, setImagesLoading] = useState<{
     [key: number]: boolean;
@@ -14,7 +14,7 @@ export default function Card() {
   });
 
   useEffect(() => {
-    const listener = () => setHeight(window.innerHeight);
+    const listener = () => setWidth(window.innerHeight > 640 ? 532 : 300);
 
     window.addEventListener("resize", listener);
 
@@ -42,12 +42,11 @@ export default function Card() {
         {images?.map((img, index) => (
           <div className="flex flex-col md:mb-0 md:justify-between">
             <div className="mb-4">
-              {imagesLoading[index] && <CatSkeleton />}
+              {imagesLoading[index] && <CatSkeleton width={width} />}
               <img
                 src={image(img)}
                 alt="cat"
-                width={height > 640 ? 532 : 300}
-                height={709}
+                width={width}
                 className={`object-center rounded-3xl ${
                   imagesLoading[index] ? "hidden" : "block"
                 }`}

@@ -1,11 +1,11 @@
 import ContentLoader from "react-content-loader";
 import React from "react";
 
-function CatSkeleton() {
+function CatSkeleton({ width = 532 }: { width?: number }) {
   return (
     <ContentLoader
       speed={1}
-      width={532}
+      width={width}
       height={709}
       viewBox="0 0 400 400"
       className="border border-zinc-800 border-1 rounded-3xl"
