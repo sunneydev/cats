@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getCats, image, vote } from "./api";
 import Button from "./Button";
 import CatSkeleton from "./CatSkeleton";
 
 export default function Card() {
+  const [height, setHeight] = useState(0);
   const [images, setImages] = useState<[string, string]>();
   const [imagesLoading, setImagesLoading] = useState<{
     [key: number]: boolean;
@@ -11,6 +12,14 @@ export default function Card() {
     [0]: true,
     [1]: true,
   });
+
+  useEffect(() => {
+    const listener = () => setHeight(window.innerHeight);
+
+    window.addEventListener("resize", listener);
+
+    return () => window.removeEventListener("resize", listener);
+  }, []);
 
   useEffect(() => {
     loadImages();
@@ -28,7 +37,7 @@ export default function Card() {
   };
 
   return (
-    <div className="w-5/6">
+    <div className="md:w-5/6">
       <div className="flex flex-col md:flex-row items-center justify-between gap-5">
         {images?.map((img, index) => (
           <div className="flex flex-col md:mb-0 md:justify-between">
@@ -37,7 +46,7 @@ export default function Card() {
               <img
                 src={image(img)}
                 alt="cat"
-                width={532}
+                width={height > 640 ? 532 : 300}
                 height={709}
                 className={`object-center rounded-3xl ${
                   imagesLoading[index] ? "hidden" : "block"
