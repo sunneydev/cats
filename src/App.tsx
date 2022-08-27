@@ -1,45 +1,66 @@
-import type { Vote } from "./types";
+import type { TResults, Vote } from "./types";
 import { useState } from "react";
 import { getResults, image } from "./api";
 import Card from "./Card";
 
 function App() {
   const [showResults, setShowResults] = useState(false);
-  const [results, setResults] = useState<Vote[]>([]);
+  const [results, setResults] = useState<TResults>();
 
-  const fetchResults = () => getResults().then(setResults);
+  const fetchResults = () =>
+    getResults().then((res) =>
+      "error" in res ? alert(res.error) : setResults(res)
+    );
 
   return (
     <div
       className={`bg-black md:h-screen w-full flex flex-col items-center justify-center p-10`}
     >
-      {showResults ? (
-        <div>
-          <div className="text-white text-center text-2xl font-semibold mb-10">
-            Top 3 Results
-          </div>
-
-          <div className=" md:flex gap-10">
-            {results.map((result) => (
-              <div className="flex flex-col gap-2 mb-5">
-                <img
-                  src={image(result.name)}
-                  alt="cat"
-                  width={200}
-                  height={300}
-                  className="object-center max-h-[500px] rounded-3xl"
-                />
-                <div>
-                  <div className="text-white text-lg font-semibold">
-                    {result.votes.wins} wins
-                  </div>
-
-                  <div className="text-white text-lg font-semibold">
-                    {result.votes.losses} losses
-                  </div>
-                </div>
+      {showResults && results ? (
+        <div className="h-screen">
+          <div className="flex flex-col gap-10">
+            <div className="flex flex-col">
+              <div className="text-white text-center text-2xl font-semibold mb-10">
+                Best 😊
               </div>
-            ))}
+              <div className="flex flex-col md:flex-row gap-4">
+                {results.best.map((result) => (
+                  <div>
+                    <img
+                      src={image(result.name)}
+                      alt="cat"
+                      width={200}
+                      height={300}
+                      className="object-center max-h-[500px] rounded-3xl"
+                    />
+                    <div className="text-white text-center text-lg font-semibold">
+                      {result.votes} votes
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <div className="text-white text-center text-2xl font-semibold mb-10">
+                Worst 😠
+              </div>
+              <div className="flex md:flex-row md:gap-4">
+                {results.worst.map((result) => (
+                  <div>
+                    <img
+                      src={image(result.name)}
+                      alt="cat"
+                      width={200}
+                      height={300}
+                      className="object-center max-h-[500px] rounded-3xl"
+                    />
+                    <div className="text-white text-center text-lg font-semibold">
+                      {result.votes} votes
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       ) : (

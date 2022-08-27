@@ -1,7 +1,15 @@
 export type Vote = {
   name: string;
-  votes: {
-    wins: number;
-    losses: number;
-  };
+  votes: number;
 };
+
+export type TResults = {
+  best: Vote[];
+  worst: Vote[];
+};
+
+export type Uncertain<T> =
+  | T
+  | {
+      error: string;
+    };
