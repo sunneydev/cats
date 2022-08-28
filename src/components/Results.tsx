@@ -11,20 +11,25 @@ function Display({
   text: string;
   votes: TResults["worst" | "best"];
 }) {
-  const width = useWidth(0.5)
+  const width = useWidth(0.5);
 
   return (
     <div className="flex flex-col">
       <div className="text-white text-center text-2xl font-semibold mb-3">
         {text}
       </div>
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         {votes.map((result) => (
           <div>
             {result.name === "fake" ? (
               <CatSkeleton w={width} />
             ) : (
-              <img src={image(result.name)} width={width} alt="cat" className="rounded-3xl" />
+              <img
+                src={image(result.name)}
+                width={width}
+                alt="cat"
+                className="rounded-3xl"
+              />
             )}
             <div className="text-white text-center text-lg font-semibold">
               {result.votes} votes
@@ -49,8 +54,8 @@ export default function Results() {
   }, []);
 
   return (
-    <div className="h-screen">
-      <div className="flex flex-col gap-10">
+    <div className="md:h-screen">
+      <div className="flex flex-col gap-10 h-full">
         <Display text="Best 😊" votes={results.best}></Display>
         <Display text="Worst 😠" votes={results.worst}></Display>
       </div>
