@@ -1,12 +1,15 @@
-import ContentLoader from "react-content-loader";
 import React from "react";
+import ContentLoader from "react-content-loader";
+import useWidth from "../hooks/useWidth";
 
-function CatSkeleton({ width = 532 }: { width?: number }) {
+function CatSkeleton() {
+  const width = useWidth();
+
   return (
     <ContentLoader
-      speed={1}
+      speed={0.6}
       width={width}
-      height={709}
+      height={width * 1.333333} // 4:3 aspect ratio
       viewBox="0 0 400 400"
       className="border border-zinc-800 border-1 rounded-3xl"
       backgroundColor="#252525"
