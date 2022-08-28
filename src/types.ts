@@ -1,5 +1,5 @@
 export type Vote = {
-  name: string;
+  name: string | "fake"
   votes: number;
 };
 

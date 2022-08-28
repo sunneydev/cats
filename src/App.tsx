@@ -1,22 +1,10 @@
-import type { TResults } from "./types";
-import { useEffect, useState } from "react";
-import { getResults } from "./api";
+import { useState } from "react";
 import Results from "./components/Results";
 import Card from "./components/Card";
 
 function App() {
   const [showResults, setShowResults] = useState(false);
-  const [results, setResults] = useState<TResults>();
-
-  const fetchResults = () =>
-    getResults().then((res) =>
-      "error" in res ? alert(res.error) : setResults(res)
-    );
-
-  useEffect(() => {
-    if (showResults) fetchResults();
-  }, [showResults]);
-
+  
   return (
     <div
       className={`bg-black md:h-screen w-full flex flex-col items-center justify-center p-10`}
@@ -27,7 +15,7 @@ function App() {
       >
         {showResults ? "Play" : "Results"}
       </button>
-      {showResults && results ? <Results results={results} /> : <Card />}
+      {showResults ? <Results /> : <Card />}
     </div>
   );
 }

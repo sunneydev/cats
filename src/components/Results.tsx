@@ -1,5 +1,8 @@
 import type { TResults } from "../types";
-import { image } from "../api";
+import { getResults, image } from "../api";
+import { useEffect, useState } from "react";
+import CatSkeleton from "./CatSkeleton";
+import useWidth from "../hooks/useWidth";
 
 function Display({
   text,
@@ -8,6 +11,8 @@ function Display({
   text: string;
   votes: TResults["worst" | "best"];
 }) {
+  const width = useWidth(0.5)
+
   return (
     <div className="flex flex-col">
       <div className="text-white text-center text-2xl font-semibold mb-3">
@@ -16,7 +21,11 @@ function Display({
       <div className="flex flex-col md:flex-row gap-4">
         {votes.map((result) => (
           <div>
-            <img src={image(result.name)} alt="cat" className="rounded-3xl" />
+            {result.name === "fake" ? (
+              <CatSkeleton w={width} />
+            ) : (
+              <img src={image(result.name)} width={width} alt="cat" className="rounded-3xl" />
+            )}
             <div className="text-white text-center text-lg font-semibold">
               {result.votes} votes
             </div>
@@ -27,7 +36,18 @@ function Display({
   );
 }
 
-export default function Results({ results }: { results: TResults }) {
+export default function Results() {
+  const [results, setResults] = useState<TResults>({
+    best: Array.from({ length: 3 }, () => ({ name: "fake", votes: 0 })),
+    worst: Array.from({ length: 3 }, () => ({ name: "fake", votes: 0 })),
+  });
+
+  useEffect(() => {
+    getResults().then((res) =>
+      "error" in res ? alert(res.error) : setResults(res)
+    );
+  }, []);
+
   return (
     <div className="h-screen">
       <div className="flex flex-col gap-10">

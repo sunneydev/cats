@@ -2,8 +2,8 @@ import React from "react";
 import ContentLoader from "react-content-loader";
 import useWidth from "../hooks/useWidth";
 
-function CatSkeleton() {
-  const width = useWidth();
+function CatSkeleton({ w }: { w?: number }) {
+  const width = w || useWidth();
 
   return (
     <ContentLoader
