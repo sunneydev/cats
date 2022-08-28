@@ -25,6 +25,7 @@ export default function Card() {
   const submitVote = (index: number) => {
     if (!images?.length) return;
 
+    plausible("vote");
     const winner = images[index];
     const loser = images[index === 0 ? 1 : 0];
 

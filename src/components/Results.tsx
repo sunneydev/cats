@@ -48,6 +48,8 @@ export default function Results() {
   });
 
   useEffect(() => {
+    plausible("view-results");
+
     getResults().then((res) =>
       "error" in res ? alert(res.error) : setResults(res)
     );
